@@ -21,6 +21,25 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
         }
     };
 
+    // 🚀 NEW: Axios handler to delete/clear a resolved student request from the inbox
+    const handleClearRequest = async (id) => {
+        if (window.confirm("Mark this student request as resolved and clear it from the inbox?")) {
+            try {
+                console.log(`Sending DELETE pointer context trace for Request ID: ${id}...`);
+                await axios.delete(`https://papertrail-backend-quej.onrender.com/requests/${id}`);
+                
+                alert('Request marked as resolved and removed.');
+                
+                if (typeof refreshRequests === 'function') {
+                    refreshRequests(); // Refresh the list state dynamically
+                }
+            } catch (error) {
+                console.error("Failed to clear request row context trace:", error);
+                alert("Error communicating with backend to drop request asset.");
+            }
+        }
+    };
+
     const handleUploadSubmit = async (e) => {
         e.preventDefault();
 
@@ -34,7 +53,7 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
             return;
         }
 
-        // 🚀 1. Switch to FormData because the backend uses @RequestParam parameters!
+        // 🚀 Switch to FormData because the backend uses @RequestParam parameters!
         const formData = new FormData();
         formData.append('title', title);
         formData.append('semester', Number(semester)); 
@@ -44,7 +63,7 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
         formData.append('examType', examType);
         formData.append('fileUrl', fileUrl); 
         
-        // 🚀 2. Append each selected branch name cleanly so Java receives it as a List<String>
+        // Append each selected branch name cleanly so Java receives it as a List<String>
         selectedBranches.forEach(b => {
             formData.append('branch', b);
         });
@@ -52,7 +71,6 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
         try {
             console.log("Dispatching multipart form payload to production backend...");
             
-            // 🚀 3. Point explicitly to the /resources/upload path suffix!
             await axios.post('https://papertrail-backend-quej.onrender.com/resources/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -178,7 +196,7 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
                     </form>
                 </div>
 
-                {/* INBOX CONTAINER */}
+                {/* INBOX CONTAINER WITH RESOLUTION CONTROLS */}
                 <div style={{ background: '#171A21', border: '1px solid #2D323C', padding: '2rem', borderRadius: '4px', height: 'fit-content' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                         <h3 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.2rem', margin: 0, color: '#F5F5F5' }}>Requests Inbox</h3>
@@ -189,8 +207,32 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
                             <p style={{ color: '#A9B0BB', fontSize: '0.85rem', textAlign: 'center' }}>No current requests logged.</p>
                         ) : (
                             studentRequests.map(req => (
-                                <div key={req.id} style={{ background: '#0F1115', border: '1px solid #2D323C', padding: '14px', borderRadius: '4px', borderLeft: '4px solid #7eb3f5' }}>
-                                    <div style={{ fontSize: '13.5px', fontWeight: '500', color: '#F5F5F5' }}>{req.requestedDetails}</div>
+                                <div key={req.id} style={{ background: '#0F1115', border: '1px solid #2D323C', padding: '14px', borderRadius: '4px', borderLeft: '4px solid #7eb3f5', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div>
+                                        <div style={{ fontSize: '13.5px', fontWeight: '500', color: '#F5F5F5' }}>{req.requestedDetails}</div>
+                                        <div style={{ fontSize: '11px', color: '#A9B0BB', marginTop: '4px' }}>Sem {req.semester} • {req.branch}</div>
+                                    </div>
+                                    
+                                    {/* 🚀 NEW: Interactive Clear Button */}
+                                    <button 
+                                        onClick={() => handleClearRequest(req.id)}
+                                        style={{ 
+                                            background: 'transparent', 
+                                            border: '1px solid #E06C75', 
+                                            color: '#E06C75', 
+                                            padding: '4px 8px', 
+                                            borderRadius: '3px', 
+                                            fontSize: '11px', 
+                                            fontWeight: '600', 
+                                            cursor: 'pointer', 
+                                            transition: 'all 0.2s',
+                                            marginLeft: '12px'
+                                        }}
+                                        onMouseEnter={(e) => { e.target.style.background = '#E06C75'; e.target.style.color = '#0F1115'; }}
+                                        onMouseLeave={(e) => { e.target.style.background = 'transparent'; e.target.style.color = '#E06C75'; }}
+                                    >
+                                        Clear
+                                    </button>
                                 </div>
                             ))
                         )}
