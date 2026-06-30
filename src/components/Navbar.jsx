@@ -2,13 +2,40 @@ import React from 'react';
 
 export default function Navbar({ onAdminClick, currentView }) {
     const scrollToSection = (id) => {
+        // 🚀 IF CURRENTLY IN ADMIN VIEW: Exit admin view first, then jump back home
+        if (currentView === 'admin' && typeof onAdminClick === 'function') {
+            onAdminClick(); // Flips the layout view state back to home mode
+            
+            // Allow a brief millisecond timeout for React to mount the home DOM nodes before scrolling
+            setTimeout(() => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            }, 80);
+            return;
+        }
+
+        // 🚀 FOR RESOURCES / LOGO: Force absolute window top positioning
+        if (id === 'hub-directory') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+        }
+
+        // 🚀 FOR OTHER SECTIONS: Smooth anchor scrolling down the viewport
         const element = document.getElementById(id);
         if (element) element.scrollIntoView({ behavior: 'smooth' });
     };
 
     return (
         <nav style={{ background: '#0f0f0f', padding: '0 3rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '56px', position: 'sticky', top: 0, zIndex: 100 }}>
-            <span style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.25rem', color: '#fff', letterSpacing: '0.02em', fontWeight: '700' }}>
+            {/* 🚀 Made the brand logo clickable to reset view position to absolute top */}
+            <span 
+                onClick={() => scrollToSection('hub-directory')} 
+                style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: '1.25rem', color: '#fff', letterSpacing: '0.02em', fontWeight: '700', cursor: 'pointer' }}
+            >
                 Paper<span style={{ color: '#7eb3f5' }}>Trail</span>
             </span>
             <div style={{ display: 'flex', gap: '2.5rem', alignItems: 'center' }}>
