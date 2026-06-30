@@ -6,7 +6,7 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
     const [selectedBranches, setSelectedBranches] = useState([]); 
     const [semester, setSemester] = useState(1);
     const [subject, setSubject] = useState('');
-    const [year, setYear] = useState('2025-26');
+    const [year, setYear] = useState('2026'); // 🚀 Updated initial state to match pure numeric string options
     const [type, setType] = useState('PAPER');
     const [examType, setExamType] = useState('End Sem');
     const [fileUrl, setFileUrl] = useState(''); 
@@ -39,17 +39,16 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
             title: title,
             semester: Number(semester), 
             subject: subject,
-            year: year, 
+            year: Number(year), // 🚀 Wrapped in Number() to turn it into a pure Java Integer
             type: type,
             examType: examType,
             fileUrl: fileUrl, 
-            branch: selectedBranches.join(', ') // Combines checked boxes into a clean comma-separated string
+            branch: selectedBranches.join(', ')
         };
 
         try {
             console.log("Dispatching lightweight JSON pointer payload to production backend...");
             
-            // 🚀 Corrected the broken markdown url string and targeted the exact backend mapping
             const response = await axios.post('https://papertrail-backend-quej.onrender.com/resources', payload);
             
             alert('Resource index published successfully!');
@@ -60,7 +59,7 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
             setFileUrl(''); 
             setSelectedBranches([]);
             setSemester(1);
-            setYear('2025-26');
+            setYear('2026'); // Reset state back to default pure number string
             setType('PAPER');
             setExamType('End Sem');
             
@@ -125,10 +124,12 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
                             
                             <div style={{ flex: 1 }}>
                                 <label style={labelStyle}>Academic Year</label>
+                                {/* 🚀 Options modified to pass pure integers to state */}
                                 <select value={year} onChange={e => setYear(e.target.value)} style={selectStyle}>
-                                    <option value="2025-26">2025-26</option>
-                                    <option value="2024-25">2024-25</option>
-                                    <option value="2023-24">2023-24</option>
+                                    <option value="2026">2026</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
                                 </select>
                             </div>
                         </div>
