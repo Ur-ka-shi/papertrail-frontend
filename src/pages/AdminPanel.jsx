@@ -6,7 +6,7 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
     const [selectedBranches, setSelectedBranches] = useState([]); 
     const [semester, setSemester] = useState(1);
     const [subject, setSubject] = useState('');
-    const [year, setYear] = useState('2026'); // 🚀 Updated initial state to match pure numeric string options
+    const [year, setYear] = useState('2026'); 
     const [type, setType] = useState('PAPER');
     const [examType, setExamType] = useState('End Sem');
     const [fileUrl, setFileUrl] = useState(''); 
@@ -34,22 +34,30 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
             return;
         }
 
-        // 🚀 Constructed clean JSON body payload to match Spring Boot's @RequestBody
-        const payload = {
-            title: title,
-            semester: Number(semester), 
-            subject: subject,
-            year: Number(year), // 🚀 Wrapped in Number() to turn it into a pure Java Integer
-            type: type,
-            examType: examType,
-            fileUrl: fileUrl, 
-            branch: selectedBranches.join(', ')
-        };
+        // 🚀 1. Switch to FormData because the backend uses @RequestParam parameters!
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('semester', Number(semester)); 
+        formData.append('subject', subject);
+        formData.append('year', year); 
+        formData.append('type', type);
+        formData.append('examType', examType);
+        formData.append('fileUrl', fileUrl); 
+        
+        // 🚀 2. Append each selected branch name cleanly so Java receives it as a List<String>
+        selectedBranches.forEach(b => {
+            formData.append('branch', b);
+        });
 
         try {
-            console.log("Dispatching lightweight JSON pointer payload to production backend...");
+            console.log("Dispatching multipart form payload to production backend...");
             
-            await axios.post('https://papertrail-backend-quej.onrender.com/resources', payload);
+            // 🚀 3. Point explicitly to the /resources/upload path suffix!
+            await axios.post('https://papertrail-backend-quej.onrender.com/resources/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
             
             alert('Resource index published successfully!');
             
@@ -59,7 +67,7 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
             setFileUrl(''); 
             setSelectedBranches([]);
             setSemester(1);
-            setYear('2026'); // Reset state back to default pure number string
+            setYear('2026'); 
             setType('PAPER');
             setExamType('End Sem');
             
@@ -69,7 +77,7 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
         } catch (error) { 
             console.error("Upload handler dropped context trace:", error);
             if (error.response) {
-                alert(`Backend rejected request: ${error.response.data.message || 'Validation failed.'}`);
+                alert(`Backend rejected request: ${error.response.data || 'Validation failed.'}`);
             } else {
                 alert("Network communication error. Verify your live backend deployment status.");
             }
@@ -124,7 +132,6 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
                             
                             <div style={{ flex: 1 }}>
                                 <label style={labelStyle}>Academic Year</label>
-                                {/* 🚀 Options modified to pass pure integers to state */}
                                 <select value={year} onChange={e => setYear(e.target.value)} style={selectStyle}>
                                     <option value="2026">2026</option>
                                     <option value="2025">2025</option>
