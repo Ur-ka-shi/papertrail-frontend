@@ -9,7 +9,7 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
     const [year, setYear] = useState('2025-26');
     const [type, setType] = useState('PAPER');
     const [examType, setExamType] = useState('End Sem');
-    const [fileUrl, setFileUrl] = useState(''); // 🛠️ Changed from file to fileUrl
+    const [fileUrl, setFileUrl] = useState(''); 
 
     const branchesList = ['AI', 'DS', 'CE', 'CST', 'ENC', 'IT'];
 
@@ -29,35 +29,40 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
             return;
         }
 
-        // Validate that it looks like a valid URL link
         if (!fileUrl.startsWith('http://') && !fileUrl.startsWith('https://')) {
             alert('Please enter a valid document URL link starting with http:// or https://');
             return;
         }
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('semester', Number(semester)); 
-        formData.append('subject', subject);
-        formData.append('year', year); 
-        formData.append('type', type);
-        formData.append('examType', examType);
-        formData.append('fileUrl', fileUrl); // 🛠️ Sending string link down the wire
-        
-        selectedBranches.forEach(b => {
-            formData.append('branch', b);
-        });
+        // 🚀 Constructed clean JSON body payload to match Spring Boot's @RequestBody
+        const payload = {
+            title: title,
+            semester: Number(semester), 
+            subject: subject,
+            year: year, 
+            type: type,
+            examType: examType,
+            fileUrl: fileUrl, 
+            branch: selectedBranches.join(', ') // Combines checked boxes into a clean comma-separated string
+        };
 
         try {
-            console.log("Dispatching lightweight URL pointer payload to production backend...");
-            const response = await axios.post('[https://papertrail-backend-quej.onrender.com](https://papertrail-backend-quej.onrender.com)', formData);
+            console.log("Dispatching lightweight JSON pointer payload to production backend...");
             
-            alert(response.data || 'Resource index published successfully!');
+            // 🚀 Corrected the broken markdown url string and targeted the exact backend mapping
+            const response = await axios.post('https://papertrail-backend-quej.onrender.com/resources', payload);
             
+            alert('Resource index published successfully!');
+            
+            // Flush all layout form fields back to standard empty states
             setTitle(''); 
             setSubject(''); 
-            setFileUrl(''); // Reset link field
+            setFileUrl(''); 
             setSelectedBranches([]);
+            setSemester(1);
+            setYear('2025-26');
+            setType('PAPER');
+            setExamType('End Sem');
             
             if (typeof fetchGlobalData === 'function') {
                 fetchGlobalData();
@@ -65,9 +70,9 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
         } catch (error) { 
             console.error("Upload handler dropped context trace:", error);
             if (error.response) {
-                alert(`Backend rejected request: ${error.response.data}`);
+                alert(`Backend rejected request: ${error.response.data.message || 'Validation failed.'}`);
             } else {
-                alert("Network communication error. Verify local server state.");
+                alert("Network communication error. Verify your live backend deployment status.");
             }
         }
     };
@@ -147,7 +152,6 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
                             </div>
                         </div>
 
-                        {/* 🛠️ SWAPPED OUT FILE PICKER BOX FOR A SECURE URL LINK STRING FIELDS */}
                         <div style={groupStyle}>
                             <label style={labelStyle}>Google Drive Sharable Link</label>
                             <input 
@@ -173,7 +177,7 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
                         <button onClick={refreshRequests} style={{ padding: '0.3rem 0.75rem', border: '1px solid #2D323C', background: '#0F1115', color: '#A9B0BB', fontSize: '0.75rem', cursor: 'pointer', borderRadius: '3px' }}>Refresh</button>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '520px', overflowY: 'auto' }}>
-                        {studentRequests.length === 0 ? (
+                        {!studentRequests || studentRequests.length === 0 ? (
                             <p style={{ color: '#A9B0BB', fontSize: '0.85rem', textAlign: 'center' }}>No current requests logged.</p>
                         ) : (
                             studentRequests.map(req => (
