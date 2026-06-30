@@ -9,20 +9,21 @@ export default function App() {
   const [resources, setResources] = useState([]);
   const [studentRequests, setStudentRequests] = useState([]);
 
-  const fetchGlobalData = async () => {
+const fetchGlobalData = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/resources/all'); // Ensure this matches backend custom 'all' pull endpoint
+      // 🚀 Updated to live Render custom 'all' endpoint
+      const res = await axios.get('https://papertrail-backend-quej.onrender.com/resources/all'); 
       setResources(res.data);
     } catch (e) { console.error(e); }
   };
 
   const refreshRequests = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/requests');
+      // 🚀 Updated to live Render requests endpoint
+      const res = await axios.get('https://papertrail-backend-quej.onrender.com/requests');
       setStudentRequests(res.data);
     } catch (e) { console.error(e); }
   };
-
   useEffect(() => {
     fetchGlobalData();
     refreshRequests();

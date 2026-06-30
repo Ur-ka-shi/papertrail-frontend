@@ -19,7 +19,7 @@ export default function ResourceCard({ resource, isAdmin, onDelete }) {
                 </div>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                <a href={`http://localhost:8080/resources/${resource.id}/download`} style={{ background: '#0f0f0f', color: '#fff', textDecoration: 'none', padding: '0.45rem 1rem', borderRadius: '3px', fontSize: '0.78rem', fontWeight: '600' }}>
+                <a href={`http://https://papertrail-backend-quej.onrender.com/resources/${resource.id}/download`} style={{ background: '#0f0f0f', color: '#fff', textDecoration: 'none', padding: '0.45rem 1rem', borderRadius: '3px', fontSize: '0.78rem', fontWeight: '600' }}>
                     ↓ Download
                 </a>
                 {isAdmin && (
