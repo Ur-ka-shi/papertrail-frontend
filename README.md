@@ -1,70 +1,193 @@
-# Getting Started with Create React App
+# 📑 PaperTrail Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A responsive React-based frontend for **PaperTrail**, an academic resource platform that helps students quickly access previous-year question papers, study notes, lab manuals, and other learning resources from a single place.
 
-## Available Scripts
+Designed to replace scattered WhatsApp groups, shared drives, and manual searches with a centralized, searchable platform.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 🌐 Live Demo
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+🔗 https://papertrail-frontend.vercel.app
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## 📖 About the Project
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+PaperTrail was built to solve a common problem faced by university students—academic resources are often scattered across seniors, WhatsApp groups, personal drives, and library archives.
 
-### `npm run build`
+The platform provides a single interface where students can:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Browse previous-year question papers
+- Access study notes and lab manuals
+- Search and filter academic resources
+- Calculate their CGPA
+- Request unavailable resources
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The frontend communicates with a Spring Boot REST API backend to fetch and manage academic resources.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
 
-### `npm run eject`
+# ✨ Features
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 📄 Academic Resource Hub
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Browse Question Papers
+- Browse Study Notes
+- Browse Lab Manuals
+- Browse Syllabus
+- Filter resources by:
+  - Branch
+  - Semester
+  - Academic Year
+  - Resource Type
+- Keyword search
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 🎓 CGPA Calculator
 
-## Learn More
+- Semester-wise SGPA input
+- Credit-based CGPA calculation
+- Automatic percentage conversion
+- Dynamic result calculation
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 📝 Resource Request System
 
-### Code Splitting
+Students can request unavailable papers or notes.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Requests are forwarded to the administrator for future uploads.
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 🎨 Responsive Interface
 
-### Making a Progressive Web App
+- Dark themed modern UI
+- Mobile responsive layout
+- Smooth navigation
+- Single Page Application (SPA)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 🛠 Tech Stack
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Frontend
+
+- React
+- JavaScript (ES6+)
+- HTML5
+- CSS3
+
+### Communication
+
+- Axios
+- REST APIs
 
 ### Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- Vercel
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+# 📸 Screenshots
+
+## 🏠 Home Page
+
+![Home Page](./assets/Papertrail_home.png)
+
+---
+
+## 🎓 CGPA Calculator
+
+![CGPA Calculator](./assets/Papertrail_cgpa.png)
+
+---
+
+## 📝 Resource Request
+
+![Request Resource](./assets/Papertrail_request.png)
+
+---
+
+# 🏗 Project Structure
+
+```text
+src/
+│
+├── components/
+├── pages/
+├── services/
+├── assets/
+├── styles/
+└── App.js
+```
+
+---
+
+# 🚀 Getting Started
+
+## Clone the repository
+
+```bash
+git clone https://github.com/Ur-ka-shi/papertrail-frontend.git
+```
+
+```bash
+cd papertrail-frontend
+```
+
+---
+
+## Install dependencies
+
+```bash
+npm install
+```
+
+---
+
+## Start the development server
+
+```bash
+npm start
+```
+
+The application will run on:
+
+```
+http://localhost:3000
+```
+
+---
+
+# 🔗 Backend Repository
+
+Spring Boot Backend:
+
+https://github.com/Ur-ka-shi/papertrail-backend
+
+---
+
+# 🚀 Future Improvements
+
+- User Authentication
+- Bookmark Resources
+- Download Analytics
+- Resource Ratings
+- Comments & Discussions
+- Resource Verification
+- Multi-college Support
+
+---
+
+## 👩‍💻 Author
+
+**Urvashi Kamble**
+
+Computer Engineering Student
+
+SNDT Women's University
+
+GitHub: https://github.com/Ur-ka-shi
