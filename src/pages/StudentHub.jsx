@@ -54,7 +54,8 @@ export default function StudentHub({ resources, fetchGlobalData, isAdminMode }) 
 
         // Fire metric tracker background request
         try {
-            await axios.post(`http://localhost:8080/resources/${res.id}/increment-download`);
+            // 🛠️ Updated to live Render URL
+            await axios.post(`https://papertrail-backend-quej.onrender.com/resources/${res.id}/increment-download`);
             setTimeout(() => { fetchGlobalData(); }, 300);
         } catch (e) { console.error("Increment tracker metric skipped:", e); }
     };
@@ -62,7 +63,8 @@ export default function StudentHub({ resources, fetchGlobalData, isAdminMode }) 
     const handleRequestSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:8080/requests', { 
+            // 🛠️ Updated to live Render URL
+            await axios.post('https://papertrail-backend-quej.onrender.com/requests', { 
                 requestedDetails: requestDetails, 
                 branch: branch || 'GENERAL', 
                 semester: parseInt(semester) || 1, 
@@ -76,7 +78,8 @@ export default function StudentHub({ resources, fetchGlobalData, isAdminMode }) 
     const handleDelete = async (id) => {
         if (window.confirm("Permanently erase this resource item?")) {
             try {
-                await axios.delete(`http://localhost:8080/resources/${id}`);
+                // 🛠️ Updated to live Render URL
+                await axios.delete(`https://papertrail-backend-quej.onrender.com/resources/${id}`);
                 fetchGlobalData();
             } catch (error) { console.error(error); }
         }

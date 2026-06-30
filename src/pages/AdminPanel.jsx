@@ -50,7 +50,7 @@ export default function AdminPanel({ fetchGlobalData, studentRequests, refreshRe
 
         try {
             console.log("Dispatching lightweight URL pointer payload to production backend...");
-            const response = await axios.post('http://localhost:8080/resources/upload', formData);
+            const response = await axios.post('[https://papertrail-backend-quej.onrender.com](https://papertrail-backend-quej.onrender.com)', formData);
             
             alert(response.data || 'Resource index published successfully!');
             
